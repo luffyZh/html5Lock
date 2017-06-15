@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+            background-color:#808080;
+            display: table;
+        }
+        .container{
+            display: table-cell;
+            vertical-align: middle;
+            height: auto;
+            overflow: hidden;
+        }
+        .box {
+            margin: 0 auto;
+            padding: 15px 50px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .arrow-input{
+            padding-left:20px;
+            background:url("./arrow.png") no-repeat scroll left center transparent;
+        }
+        #input{
+            min-width: 200px;
+        }
+        .todolist{
+            text-align: center;
+            background-color: #fff;
+        }
+        .item{
+            height: 20px;
+            border-left:1px solid grey ;
+            border-right:1px solid grey;
+            border-bottom: 1px solid grey;
+        }
+        .item:nth-child(1){
+            border-top: 1px solid grey;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <input class="arrow-input" type="input" id="input" oninput="aa()" onpropertychange="aa()" >
+            <div id="todolist" class="todolist"></div>
+        </div>
+    </div>
+</body>
+<script>
+   var targetText=[];
+   window.onload=function () {
+       document.getElementsByClassName("box")[0].style.width=document.getElementById("input").getBoundingClientRect().width+"px";
+       document.getElementById("todolist").style.width=document.getElementById("input").getBoundingClientRect().width+"px";
+       var html='';
+       document.onkeydown = function(e){
+           if(!e){
+               e = window.event;
+           }
+           if((e.keyCode || e.which) == 13){
+                if(document.getElementById("input").value!=""){
+                    html+='<div class="item">'+document.getElementById("input").value+'</div>';
+                    document.getElementById("todolist").innerHTML=html;
+                    var domNew=document.getElementsByClassName("item");
+                    targetText=[];
+                    for(var i=0;i<domNew.length;i++){
+                        targetText.push(domNew[i].innerHTML);
+                    }
+                    document.getElementById("input").value="";
+                }
+           }
+       }
+   }
+   function aa(){
+       var newHtml='';
+       for(var i=0;i<targetText.length;i++){
+           if(targetText[i].indexOf(document.getElementById("input").value)>-1){
+               newHtml+='<div class="item">'+targetText[i].substring(0,targetText[i].indexOf(document.getElementById("input").value))+'<span class="color" style="color:#ff0000">'+targetText[i].substr(targetText[i].indexOf(document.getElementById("input").value),document.getElementById("input").value.length)+'</span>'+targetText[i].substring(targetText[i].indexOf(document.getElementById("input").value)+document.getElementById("input").value.length,targetText[i].length)+'</div>';
+           }
+       }
+       document.getElementById("todolist").innerHTML=newHtml;
+   }
+</script>
+</html>
